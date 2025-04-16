@@ -2,6 +2,8 @@
 
 [![Build status](https://travis-ci.org/buzzySmile/qBreakpad.svg?branch=master)](https://travis-ci.org/buzzySmile/qBreakpad)
 
+[中文文档](README_zh.md)
+
 qBreakpad is Qt library to use google-breakpad crash reporting facilities (and using it conviniently).
 Supports
 * Windows (but crash dump decoding will not work with MinGW compiler)
@@ -14,16 +16,27 @@ How to use
 ```bash
 $ git clone --recursive https://github.com/buzzySmile/qBreakpad.git
 ```
-* Build qBreakpad static library (qBreakpad/handler/)
-* Include "qBreakpad.pri" to your target Qt project
-```c++
-include($$PWD/{PATH_TO_QBREAKPAD}/qBreakpad.pri)
+
+* Build qBreakpad library using CMake
+```bash
+$ mkdir build && cd build
+$ cmake ..
+$ cmake --build .
 ```
-* Setup linking with "qBreakpad" library
-```c++
-QMAKE_LIBDIR += $$PWD/{PATH_TO_QBREAKPAD}/handler
-LIBS += -lqBreakpad
+
+* Find and link qBreakpad in your CMake project
+```cmake
+# In your CMakeLists.txt
+find_package(qBreakpad REQUIRED)
+target_link_libraries(your_target PRIVATE qBreakpad::qBreakpad)
 ```
+
+* Alternatively, include qBreakpad as a subproject in your CMake project
+```cmake
+add_subdirectory(path/to/qBreakpad)
+target_link_libraries(your_target PRIVATE qBreakpad::qBreakpad)
+```
+
 * Use ```QBreakpadHandler``` singleton class to enable automatic crash dumps generation on any failure; example:
 ```c++
 #include <QBreakpadHandler.h>
@@ -35,6 +48,7 @@ int main(int argc, char* argv[])
     ...
 }
 ```
+
 * Read Google Breakpad documentation to know further workflow
 
 Getting started with Google Breakpad

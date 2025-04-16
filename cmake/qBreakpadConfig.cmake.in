@@ -1,0 +1,13 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(Qt5 COMPONENTS Core Network)
+
+include("${CMAKE_CURRENT_LIST_DIR}/qBreakpadTargets.cmake")
+
+# Create convenient alias for users of the package
+if(NOT TARGET qBreakpad::qBreakpad)
+    add_library(qBreakpad::qBreakpad ALIAS qBreakpad)
+endif()
+
+check_required_components(qBreakpad)
