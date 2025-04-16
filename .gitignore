@@ -32,3 +32,6 @@ Makefile*
 *.dmp
 *.bak
 docs/html/
+/build
+/.vscode
+.windsurfrules
