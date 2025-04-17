@@ -24,16 +24,32 @@ $ cmake ..
 $ cmake --build .
 ```
 
-* Find and link qBreakpad in your CMake project
+* Find and link qBreakpad in your CMake project (after installation)
 ```cmake
 # In your CMakeLists.txt
 find_package(qBreakpad REQUIRED)
 target_link_libraries(your_target PRIVATE qBreakpad::qBreakpad)
 ```
 
-* Alternatively, include qBreakpad as a subproject in your CMake project
+* Include qBreakpad as a subproject in your CMake project
 ```cmake
 add_subdirectory(path/to/qBreakpad)
+target_link_libraries(your_target PRIVATE qBreakpad::qBreakpad)
+```
+
+* Use FetchContent to integrate qBreakpad directly (Modern CMake, recommended)
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(
+  qBreakpad
+  GIT_REPOSITORY https://github.com/feifeizuo/qBreakpad.git
+  GIT_TAG        master  # or specify a specific tag/commit
+)
+
+FetchContent_MakeAvailable(qBreakpad)
+
+# Use the target directly, no need to manually set include paths or link
 target_link_libraries(your_target PRIVATE qBreakpad::qBreakpad)
 ```
 
