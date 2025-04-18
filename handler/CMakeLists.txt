@@ -33,6 +33,9 @@ target_include_directories(${TARGET_NAME}
         ${BREAKPAD_PATH}
 )
 
+# 为其他项目添加引用别名，便于在FetchContent中使用
+add_library(qBreakpad::${TARGET_NAME} ALIAS ${TARGET_NAME})
+
 # Google Breakpad platform-specific sources
 if(UNIX)
     target_sources(${TARGET_NAME} PRIVATE
@@ -127,4 +130,20 @@ if(QBREAKPAD_INSTALL)
     install(FILES ${HEADERS}
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qBreakpad
     )
+
+    # 安装单独的FetchContent配置文件（如果不是子项目）
+    if(NOT QBREAKPAD_AS_SUBPROJECT)
+        # FetchContent兼容性配置
+        configure_file(
+            "${CMAKE_CURRENT_SOURCE_DIR}/../cmake/qBreakpadFetchConfig.cmake.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/qBreakpadFetchConfig.cmake"
+            @ONLY
+        )
+        
+        # 安装FetchContent配置文件
+        install(FILES
+            "${CMAKE_CURRENT_BINARY_DIR}/qBreakpadFetchConfig.cmake"
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/qBreakpad
+        )
+    endif()
 endif()

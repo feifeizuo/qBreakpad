@@ -1,0 +1,28 @@
+@PACKAGE_INIT@
+
+# 提供对FetchContent使用的专门支持
+# 此文件用于项目作为FetchContent被引用时提供配置
+
+include(CMakeFindDependencyMacro)
+find_dependency(Qt5 COMPONENTS Core Network)
+
+# 支持从FetchContent或ExternalProject使用
+if(NOT TARGET qBreakpad::qBreakpad)
+    # 设置qBreakpad作为子项目时的配置
+    set(QBREAKPAD_AS_SUBPROJECT ON)
+    
+    # 默认关闭演示和测试构建
+    option(QBREAKPAD_BUILD_DEMO_SUBPROJECT "Build the demo applications when used as subproject" OFF)
+    option(QBREAKPAD_BUILD_TESTS_SUBPROJECT "Build the test applications when used as subproject" OFF)
+    
+    # 包含目标，根据它们是在构建树中还是安装目录中
+    if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/qBreakpadTargets.cmake")
+        # 从安装目录包含
+        include("${CMAKE_CURRENT_LIST_DIR}/qBreakpadTargets.cmake")
+    else()
+        # 如果在FetchContent中直接使用（没有安装），则什么都不用做
+        # 因为目标将由主CMakeLists.txt自动创建
+    endif()
+endif()
+
+check_required_components(qBreakpad)
